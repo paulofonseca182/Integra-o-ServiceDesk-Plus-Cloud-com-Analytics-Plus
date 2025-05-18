@@ -1,0 +1,423 @@
+{
+  "response_status": [
+    {
+      "status_code": 2000,
+      "status": "success"
+    }
+  ],
+  "list_info": {
+    "has_more_rows": false,
+    "row_count": 5
+  },
+  "requests": [
+    {
+      "requester": {
+        "email_id": null,
+        "is_technician": false,
+        "sms_mail": null,
+        "mobile": null,
+        "last_name": null,
+        "user_scope": "internal_user",
+        "sms_mail_id": null,
+        "cost_per_hour": null,
+        "site": {
+          "deleted": false,
+          "name": "Base Site",
+          "id": "239606000000222001",
+          "is_default": true
+        },
+        "phone": null,
+        "employee_id": null,
+        "name": "Ana Silva",
+        "id": "239606000000348009",
+        "photo_url": "https://profile.zoho.com/file?exp=10&ID=-1&t=user&height=60&width=60",
+        "is_vip_user": false,
+        "department": null,
+        "first_name": "Ana Silva",
+        "job_title": null
+      },
+      "template": {
+        "inactive": false,
+        "id": "239606000000338385",
+        "image": "incident-icon",
+        "is_service_template": false,
+        "name": "Default Request"
+      },
+      "created_time": {
+        "display_value": "May 16, 2025 02:44 PM",
+        "value": "1747417474570"
+      },
+      "has_draft": false,
+      "cancel_flag_comments": null,
+      "display_id": "1",
+      "subject": "\"Computador não liga após atualização do Windows\"",
+      "technician": {
+        "email_id": "pfonseca.arq@gmail.com",
+        "is_technician": true,
+        "sms_mail": null,
+        "mobile": null,
+        "last_name": "",
+        "user_scope": "internal_user",
+        "sms_mail_id": null,
+        "cost_per_hour": "0",
+        "site": {
+          "id": "239606000000222001"
+        },
+        "phone": null,
+        "employee_id": null,
+        "name": "Paulo",
+        "id": "239606000000341326",
+        "is_vip_user": false,
+        "photo_url": "https://profile.zoho.com/file?exp=10&ID=887592098&t=user&height=60&width=60",
+        "department": null,
+        "first_name": "Paulo",
+        "job_title": null
+      },
+      "due_by_time": {
+        "display_value": "May 16, 2025 03:44 PM",
+        "value": "1747421074570"
+      },
+      "display_key": {
+        "display_value": "1",
+        "value": "1"
+      },
+      "is_service_request": false,
+      "cancellation_requested": false,
+      "has_notes": false,
+      "id": "239606000000348015",
+      "maintenance": null,
+      "status": {
+        "in_progress": true,
+        "internal_name": "Open",
+        "stop_timer": false,
+        "color": "#0066ff",
+        "name": "Open",
+        "id": "239606000000006657"
+      },
+      "group": null
+    },
+    {
+      "requester": {
+        "email_id": null,
+        "is_technician": false,
+        "sms_mail": null,
+        "mobile": null,
+        "last_name": null,
+        "user_scope": "internal_user",
+        "sms_mail_id": null,
+        "cost_per_hour": null,
+        "site": {
+          "deleted": false,
+          "name": "Base Site",
+          "id": "239606000000222001",
+          "is_default": true
+        },
+        "phone": null,
+        "employee_id": null,
+        "name": "Roberto Almeida",
+        "id": "239606000000348027",
+        "photo_url": "https://profile.zoho.com/file?exp=10&ID=-1&t=user&height=60&width=60",
+        "is_vip_user": false,
+        "department": null,
+        "first_name": "Roberto Almeida",
+        "job_title": null
+      },
+      "template": {
+        "inactive": false,
+        "id": "239606000000338385",
+        "image": "incident-icon",
+        "is_service_template": false,
+        "name": "Default Request"
+      },
+      "created_time": {
+        "display_value": "May 16, 2025 02:47 PM",
+        "value": "1747417678910"
+      },
+      "has_draft": false,
+      "cancel_flag_comments": null,
+      "display_id": "2",
+      "subject": "Solicito acesso ao sistema SAP",
+      "technician": {
+        "email_id": "pilulasfragmentadas@gmail.com",
+        "is_technician": true,
+        "sms_mail": null,
+        "mobile": null,
+        "last_name": "Fonseca",
+        "user_scope": "internal_user",
+        "sms_mail_id": null,
+        "cost_per_hour": "0",
+        "site": {
+          "id": "239606000000222001"
+        },
+        "phone": "37999061018",
+        "employee_id": "182",
+        "name": "Pcross",
+        "id": "239606000000346013",
+        "is_vip_user": false,
+        "photo_url": "https://profile.zoho.com/file?exp=10&ID=887638072&t=user&height=60&width=60",
+        "department": null,
+        "first_name": "Paulo",
+        "job_title": "Suporte Técnico ou TI Central"
+      },
+      "due_by_time": {
+        "display_value": "May 16, 2025 04:47 PM",
+        "value": "1747424878910"
+      },
+      "display_key": {
+        "display_value": "2",
+        "value": "2"
+      },
+      "is_service_request": false,
+      "cancellation_requested": false,
+      "has_notes": false,
+      "id": "239606000000348033",
+      "maintenance": null,
+      "status": {
+        "in_progress": false,
+        "internal_name": "Resolved",
+        "stop_timer": true,
+        "color": "#00ff66",
+        "name": "Resolved",
+        "id": "239606000000006663"
+      },
+      "group": null
+    },
+    {
+      "requester": {
+        "email_id": null,
+        "is_technician": false,
+        "sms_mail": null,
+        "mobile": null,
+        "last_name": null,
+        "user_scope": "internal_user",
+        "sms_mail_id": null,
+        "cost_per_hour": null,
+        "site": {
+          "deleted": false,
+          "name": "Base Site",
+          "id": "239606000000222001",
+          "is_default": true
+        },
+        "phone": null,
+        "employee_id": null,
+        "name": " Júlia Mendes",
+        "id": "239606000000348041",
+        "photo_url": "https://profile.zoho.com/file?exp=10&ID=-1&t=user&height=60&width=60",
+        "is_vip_user": false,
+        "department": null,
+        "first_name": " Júlia Mendes",
+        "job_title": null
+      },
+      "template": {
+        "inactive": false,
+        "id": "239606000000338385",
+        "image": "incident-icon",
+        "is_service_template": false,
+        "name": "Default Request"
+      },
+      "created_time": {
+        "display_value": "May 16, 2025 02:50 PM",
+        "value": "1747417832323"
+      },
+      "has_draft": false,
+      "cancel_flag_comments": null,
+      "display_id": "3",
+      "subject": "Erro 404 ao acessar sistema de CRM",
+      "technician": {
+        "email_id": "pilulasfragmentadas@gmail.com",
+        "is_technician": true,
+        "sms_mail": null,
+        "mobile": null,
+        "last_name": "Fonseca",
+        "user_scope": "internal_user",
+        "sms_mail_id": null,
+        "cost_per_hour": "0",
+        "site": {
+          "id": "239606000000222001"
+        },
+        "phone": "37999061018",
+        "employee_id": "182",
+        "name": "Pcross",
+        "id": "239606000000346013",
+        "is_vip_user": false,
+        "photo_url": "https://profile.zoho.com/file?exp=10&ID=887638072&t=user&height=60&width=60",
+        "department": null,
+        "first_name": "Paulo",
+        "job_title": "Suporte Técnico ou TI Central"
+      },
+      "due_by_time": {
+        "display_value": "May 16, 2025 03:50 PM",
+        "value": "1747421432323"
+      },
+      "display_key": {
+        "display_value": "3",
+        "value": "3"
+      },
+      "is_service_request": false,
+      "cancellation_requested": false,
+      "has_notes": false,
+      "id": "239606000000348047",
+      "maintenance": null,
+      "status": {
+        "in_progress": true,
+        "internal_name": "Open",
+        "stop_timer": false,
+        "color": "#0066ff",
+        "name": "Open",
+        "id": "239606000000006657"
+      },
+      "group": null
+    },
+    {
+      "requester": {
+        "email_id": null,
+        "is_technician": false,
+        "sms_mail": null,
+        "mobile": null,
+        "last_name": null,
+        "user_scope": "internal_user",
+        "sms_mail_id": null,
+        "cost_per_hour": null,
+        "site": {
+          "deleted": false,
+          "name": "Base Site",
+          "id": "239606000000222001",
+          "is_default": true
+        },
+        "phone": null,
+        "employee_id": null,
+        "name": "Paulo Rodrigues",
+        "id": "239606000000348055",
+        "photo_url": "https://profile.zoho.com/file?exp=10&ID=-1&t=user&height=60&width=60",
+        "is_vip_user": false,
+        "department": null,
+        "first_name": "Paulo Rodrigues",
+        "job_title": null
+      },
+      "template": {
+        "inactive": false,
+        "id": "239606000000338385",
+        "image": "incident-icon",
+        "is_service_template": false,
+        "name": "Default Request"
+      },
+      "created_time": {
+        "display_value": "May 16, 2025 02:52 PM",
+        "value": "1747417954073"
+      },
+      "has_draft": false,
+      "cancel_flag_comments": null,
+      "display_id": "4",
+      "subject": "Solicitação de novo headset",
+      "technician": null,
+      "due_by_time": {
+        "display_value": "May 19, 2025 01:52 PM",
+        "value": "1747673554146"
+      },
+      "display_key": {
+        "display_value": "4",
+        "value": "4"
+      },
+      "is_service_request": false,
+      "cancellation_requested": false,
+      "has_notes": false,
+      "id": "239606000000348061",
+      "maintenance": null,
+      "status": {
+        "in_progress": false,
+        "internal_name": "Closed",
+        "stop_timer": false,
+        "color": "#006600",
+        "name": "Closed",
+        "id": "239606000000006661"
+      },
+      "group": null
+    },
+    {
+      "requester": {
+        "email_id": null,
+        "is_technician": false,
+        "sms_mail": null,
+        "mobile": null,
+        "last_name": null,
+        "user_scope": "internal_user",
+        "sms_mail_id": null,
+        "cost_per_hour": null,
+        "site": {
+          "deleted": false,
+          "name": "Base Site",
+          "id": "239606000000222001",
+          "is_default": true
+        },
+        "phone": null,
+        "employee_id": null,
+        "name": "Marcos Oliveira",
+        "id": "239606000000348069",
+        "photo_url": "https://profile.zoho.com/file?exp=10&ID=-1&t=user&height=60&width=60",
+        "is_vip_user": false,
+        "department": null,
+        "first_name": "Marcos Oliveira",
+        "job_title": null
+      },
+      "template": {
+        "inactive": false,
+        "id": "239606000000338385",
+        "image": "incident-icon",
+        "is_service_template": false,
+        "name": "Default Request"
+      },
+      "created_time": {
+        "display_value": "May 16, 2025 02:55 PM",
+        "value": "1747418116109"
+      },
+      "has_draft": false,
+      "cancel_flag_comments": null,
+      "display_id": "5",
+      "subject": "Email não recebe mensagens externas",
+      "technician": {
+        "email_id": "pfonseca.arq@gmail.com",
+        "is_technician": true,
+        "sms_mail": null,
+        "mobile": null,
+        "last_name": "",
+        "user_scope": "internal_user",
+        "sms_mail_id": null,
+        "cost_per_hour": "0",
+        "site": {
+          "id": "239606000000222001"
+        },
+        "phone": null,
+        "employee_id": null,
+        "name": "Paulo",
+        "id": "239606000000341326",
+        "is_vip_user": false,
+        "photo_url": "https://profile.zoho.com/file?exp=10&ID=887592098&t=user&height=60&width=60",
+        "department": null,
+        "first_name": "Paulo",
+        "job_title": null
+      },
+      "due_by_time": {
+        "display_value": "May 16, 2025 04:55 PM",
+        "value": "1747425316109"
+      },
+      "display_key": {
+        "display_value": "5",
+        "value": "5"
+      },
+      "is_service_request": false,
+      "cancellation_requested": false,
+      "has_notes": false,
+      "id": "239606000000348075",
+      "maintenance": null,
+      "status": {
+        "in_progress": true,
+        "internal_name": "Open",
+        "stop_timer": false,
+        "color": "#0066ff",
+        "name": "Open",
+        "id": "239606000000006657"
+      },
+      "group": null
+    }
+  ]
+}
