@@ -192,16 +192,10 @@ async function fetchDataFromAPI(endpoint, fileName, dataKey) {
         // Salvar os dados em arquivos JSON
         await saveDataToFile(response.data[dataKey], fileName);
         
-        // Salvar a resposta completa para análise
-        await saveDataToFile(response.data, `${fileName.split('.')[0]}_full_response.json`);
-        
         return response.data[dataKey];
       } else if (response.data && response.data.response_status && response.data.response_status[0].status === 'success') {
         // Alguns endpoints podem retornar uma estrutura diferente
-        console.log('Resposta bem-sucedida, mas sem a estrutura esperada. Salvando a resposta completa.');
-        
-        // Salvar a resposta completa para análise
-        await saveDataToFile(response.data, `${fileName.split('.')[0]}_full_response.json`);
+        console.log('Resposta bem-sucedida, mas sem a estrutura esperada.');
         
         // Criar um array vazio para manter compatibilidade
         await saveDataToFile([], fileName);
@@ -272,9 +266,67 @@ async function fetchTicketsOld() {
   }
 }
 
+// Função para enviar dados para o Analytics Plus
+async function sendTicketsToAnalytics(tickets) {
+  try {
+    const analyticsUrl = 'https://analyticsplus.manageengine.com/stream/107196000000005379/rows';
+    const secret = '2565a8c157f9931492f729eeed663285892327d76770275d3b1a33d89c4af21';
+    
+    console.log('Enviando dados para o Analytics Plus...');
+    
+    // Configurar o cliente com os headers necessários
+    const client = axios.create({
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    
+    // Fazer a requisição POST
+    const response = await client.post(`${analyticsUrl}?SECRET=${secret}`, tickets);
+    
+    if (response.status === 200 || response.status === 201) {
+      console.log('Dados enviados com sucesso para o Analytics Plus!');
+      return true;
+    } else {
+      throw new Error(`Erro ao enviar dados. Status: ${response.status}`);
+    }
+  } catch (error) {
+    console.error('Erro ao enviar dados para o Analytics Plus:', error.message);
+    if (error.response) {
+      console.error('Status do erro:', error.response.status);
+      console.error('Detalhes do erro:', JSON.stringify(error.response.data, null, 2));
+    }
+    throw error;
+  }
+}
+
 // Função para buscar chamados (nova versão com URL específica)
 async function fetchTickets() {
-  return fetchDataFromAPI('requests', 'tickets.json', 'requests');
+  try {
+    // Busca os dados originais da API
+    const ticketsData = await fetchDataFromAPI('requests', 'tickets.json', 'requests');
+    
+    // Transforma os dados para o formato desejado
+    const ticketsFormatados = ticketsData.map(ticket => ({
+      "ID": ticket.id || "",
+      "Assunto": ticket.subject || "",
+      "Status": ticket.status?.name || "",
+      "Prioridade": ticket.priority?.name || "",
+      "Solicitante": ticket.requester?.name || "",
+      "DataCriacao": ticket.created_time?.display_value || ""
+    }));
+
+    // Salva os dados formatados no arquivo
+    await saveDataToFile(ticketsFormatados, 'tickets.json');
+    
+    // Envia os dados para o Analytics Plus
+    await sendTicketsToAnalytics(ticketsFormatados);
+    
+    return ticketsFormatados;
+  } catch (error) {
+    console.error('Erro ao processar e enviar tickets:', error.message);
+    throw error;
+  }
 }
 
 // Função para buscar técnicos
@@ -313,5 +365,6 @@ module.exports = {
   fetchDepartments,
   fetchAssets,
   saveDataToFile,
-  getAuthenticatedClient
+  getAuthenticatedClient,
+  sendTicketsToAnalytics
 }; 

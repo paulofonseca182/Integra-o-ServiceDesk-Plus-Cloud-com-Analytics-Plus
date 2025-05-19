@@ -20,11 +20,9 @@ async function cleanupUnnecessaryFiles() {
     
     // Arquivos necessários para manter
     const necessaryFiles = [
-      'tickets.json',
-      'technicians.json',
-      'departments.json',
-      'assets.json',
-      'auth_token.json'  // Este arquivo é necessário para a autenticação
+      'tickets.json',      // Dados dos chamados formatados
+      'auth_token.json',   // Token de autenticação
+      'sync_summary.json'  // Resumo da sincronização
     ];
     
     // Remove arquivos desnecessários
@@ -49,6 +47,10 @@ async function cleanupUnnecessaryFiles() {
     console.error('Erro ao limpar arquivos:', error.message);
   }
 }
+
+module.exports = {
+  cleanupUnnecessaryFiles
+};
 
 // Executa a limpeza
 console.log('Iniciando limpeza de arquivos...');
