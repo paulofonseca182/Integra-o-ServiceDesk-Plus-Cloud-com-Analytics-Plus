@@ -1,10 +1,10 @@
 # Integração ServiceDesk Plus Cloud com Analytics Plus
 
-Este programa faz a conexão entre o ServiceDesk Plus Cloud e o Analytics Plus, copiando automaticamente as informações dos chamados (tickets) de um sistema para o outro.
+Este script faz a conexão entre o ServiceDesk Plus Cloud e o Analytics Plus, copiando automaticamente as informações dos chamados (tickets) de um sistema para o outro.
 
 ## 🤔 Para que serve?
 
-Imagine que você precisa ver relatórios dos seus chamados do ServiceDesk Plus no Analytics Plus. Este programa faz exatamente isso:
+Precisa ver relatórios dos seus chamados do ServiceDesk Plus no Analytics Plus? Este script faz exatamente isso:
 1. Busca todos os chamados do ServiceDesk Plus
 2. Organiza as informações importantes de cada chamado:
    - Número do chamado
@@ -21,7 +21,6 @@ Imagine que você precisa ver relatórios dos seus chamados do ServiceDesk Plus 
 ## 📋 O que você precisa ter instalado?
 
 1. Node.js
-   - É um programa que permite rodar nosso script
    - Para verificar se já está instalado:
      1. Abra o "Prompt de Comando" (CMD) ou "PowerShell"
      2. Digite: `node --version`
@@ -29,7 +28,7 @@ Imagine que você precisa ver relatórios dos seus chamados do ServiceDesk Plus 
      4. Se der erro, baixe e instale do site: https://nodejs.org/
      5. Escolha a versão "LTS" (mais estável)
 
-2. NPM (vem junto com o Node.js)
+2. NPM 
    - Para verificar se está instalado:
      1. No mesmo prompt de comando
      2. Digite: `npm --version`
@@ -46,12 +45,12 @@ Imagine que você precisa ver relatórios dos seus chamados do ServiceDesk Plus 
    ```
    npm install
    ```
-   - Este comando vai instalar tudo que o programa precisa
+   - Este comando vai instalar tudo que o script precisa
    - Aguarde até finalizar
 
 ## ⚙️ Configuração
 
-O programa precisa saber como acessar seus sistemas. As configurações ficam no arquivo `config.js`:
+O script precisa saber como acessar seus sistemas. As configurações ficam no arquivo `config.js`:
 
 1. Configurações do ServiceDesk Plus:
    - `clientId`: Seu ID de cliente
@@ -63,10 +62,9 @@ O programa precisa saber como acessar seus sistemas. As configurações ficam no
    - analyticsUrl: Url workspace e tabela (fornecida ao criar tabela)
    - secret: codigo fornecido junto da url
 
-
 ## 🚀 Como usar?
 
-Você tem duas opções para rodar o programa:
+Você tem duas opções para rodar o script:
 
 1. **Execução única** (roda uma vez e para):
    ```
@@ -106,21 +104,12 @@ Se aparecer algum erro:
    - "Erro ao buscar dados": Problema de conexão com ServiceDesk Plus
    - "Erro ao enviar dados": Problema de conexão com Analytics Plus
 
-## 📞 Precisa de ajuda?
-
-Se encontrar algum problema:
-1. Verifique a documentação do ServiceDesk Plus
-   - [Documentação Oficial da API](https://www.manageengine.com/products/service-desk/sdp-v3-api/)
-2. Verifique a documentação do Analytics Plus
-   - [Documentação do Analytics Plus](https://www.manageengine.com/analytics-plus/help/)
-
-
 ## 🔒 Segurança
 
-- O programa salva um arquivo `auth_token.json` com informações de login
+- O script salva um arquivo `auth_token.json` com informações de login
 - Este arquivo é necessário e seguro
 - Não compartilhe este arquivo com ninguém
-- Não apague este arquivo (o programa cria um novo se necessário)
+- Não apague este arquivo (o script cria um novo se necessário)
 
 ## 🔧 Detalhamento Técnico do Projeto
 
@@ -128,19 +117,36 @@ Se encontrar algum problema:
 
 O projeto possui 4 arquivos principais:
 
-1. `integration.js`: Arquivo principal que você executa
-2. `serviceDeskApi.js`: Contém todas as funções de integração
-3. `config.js`: Guarda todas as configurações
-4. `cleanupFiles.js`: Ajuda a manter os arquivos organizados
+1. `config.js`: Guarda todas as configurações
+2. `cleanupFiles.js`: Ajuda a manter os arquivos organizados
+3. `serviceDeskApi.js`: Contém todas as funções de integração
+4. `integration.js`: Arquivo principal que você executa
 
 ### ⚙️ Como Funciona (Passo a Passo)
 
-#### 1. Arquivo `integration.js`
-Este é o arquivo que você executa. Ele tem duas funções principais:
-- `runIntegration()`: Executa a integração uma única vez
-- `runPeriodicIntegration()`: Executa a integração a cada 3 minutos
+#### 1. Arquivo `config.js`
+Guarda todas as configurações importantes:
 
-#### 2. Arquivo `serviceDeskApi.js`
+1. Configurações do Zoho Auth:
+   - URLs de autenticação
+   - IDs e chaves do cliente
+   - Onde salvar o token
+
+2. Configurações do ServiceDesk:
+   - URL base do sistema
+   - Endpoints da API
+
+3. Configurações do Analytics Plus:
+   - URL para envio dos dados
+   - Chave secreta
+
+#### 2. Arquivo `cleanupFiles.js`
+Mantém o projeto organizado:
+- Remove arquivos temporários
+- Mantém apenas os arquivos necessários
+- Garante que o diretório de dados existe
+
+#### 3. Arquivo `serviceDeskApi.js`
 Este é o coração do projeto. Vamos entender cada função:
 
 ##### Funções de Autenticação:
@@ -148,23 +154,22 @@ Este é o coração do projeto. Vamos entender cada função:
    - Cria um cliente HTTP com as configurações básicas
    - Define os tipos de conteúdo aceitos
 
-2. `authenticate()`
-   - Verifica se já existe um token salvo
-   - Se existir e estiver válido, usa ele
-   - Se não existir ou estiver expirado, pede um novo
-   - Salva o token para uso futuro
-
-3. `refreshToken()`
-   - Renova um token que está para expirar
-   - Evita ter que fazer login toda hora
-   - Salva o novo token
-
-4. `saveToken()`
+2. `saveToken()`
    - Salva o token no arquivo `auth_token.json`
    - Guarda informações como:
      * Token de acesso
      * Quando ele expira
      * Token de renovação
+
+3. `authenticate()`
+   - Verifica se já existe um token salvo
+   - Se existir e estiver válido, usa ele
+   - Se não existir ou estiver expirado, pede um novo
+   - Salva o token para uso futuro
+
+4. `refreshToken()`
+   - Renova um token que está para expirar
+   - Salva o novo token
 
 5. `readToken()`
    - Lê o token salvo no arquivo
@@ -197,42 +202,62 @@ Este é o coração do projeto. Vamos entender cada função:
    - Envia os dados usando a URL e chave secreta
    - Confirma se o envio deu certo
 
-#### 3. Arquivo `config.js`
-Guarda todas as configurações importantes:
-
-1. Configurações do Zoho Auth:
-   - URLs de autenticação
-   - IDs e chaves do cliente
-   - Onde salvar o token
-
-2. Configurações do ServiceDesk:
-   - URL base do sistema
-   - Endpoints da API
-
-3. Configurações do Analytics Plus:
-   - URL para envio dos dados
-   - Chave secreta
-
-#### 4. Arquivo `cleanupFiles.js`
-Mantém o projeto organizado:
-- Remove arquivos temporários
-- Mantém apenas os arquivos necessários
-- Garante que o diretório de dados existe
+#### 4. Arquivo `integration.js`
+Este é o arquivo que você executa. Ele tem duas funções principais:
+- `runIntegration()`: Executa a integração uma única vez
+- `runPeriodicIntegration()`: Executa a integração a cada 3 minutos
 
 ### 🔄 Fluxo de Execução
 
-Quando você executa o programa, acontece o seguinte:
+Quando você executa o script, o processo segue este fluxo:
 
-1. O `integration.js` inicia
-2. Chama a função `fetchTickets()`
-3. Esta função:
-   - Faz a autenticação
-   - Busca os chamados
-   - Formata os dados
-   - Envia para o Analytics Plus
-4. Se estiver no modo periódico:
-   - Espera 3 minutos
-   - Repete todo o processo
+1. **Início da Execução** (`integration.js`)
+   - O script verifica se foi executado em modo periódico (--periodic) ou único
+   - Inicia o processo de integração mostrando data e hora
+
+2. **Autenticação** (`serviceDeskApi.js`)
+   - Verifica se existe um token de acesso salvo
+   - Se existir e estiver válido, usa ele
+   - Se não existir ou estiver expirado:
+     * Solicita um novo token usando as credenciais
+     * Salva o novo token para usos futuros
+
+3. **Busca de Chamados** (`serviceDeskApi.js`)
+   - Conecta na API do ServiceDesk Plus usando o token
+   - Busca a lista completa de chamados
+   - Para cada chamado, coleta:
+     * Identificação (ID)
+     * Detalhes do problema (assunto)
+     * Estado atual (status)
+     * Informações do solicitante
+     * Dados do departamento
+     * Técnico responsável
+     * Data de abertura
+
+4. **Processamento dos Dados**
+   - Formata os dados dos chamados
+   - Remove campos desnecessários
+   - Padroniza o formato das informações
+   - Trata campos vazios ou nulos
+
+5. **Envio para Analytics Plus**
+   - Estabelece conexão segura com Analytics Plus
+   - Envia os dados formatados
+   - Confirma o recebimento dos dados
+   - Registra o sucesso ou falha da operação
+
+6. **Finalização**
+   - Exibe resumo da operação
+   - Mostra quantidade de chamados processados
+   - Se estiver em modo periódico:
+     * Aguarda 3 minutos
+     * Reinicia todo o processo do passo 1
+
+7. **Tratamento de Erros**
+   - Em caso de falhas:
+     * Exibe mensagens detalhadas do erro
+     * Tenta reconectar em caso de problemas de rede
+     * Renova o token se estiver expirado
 
 ### 🔐 Segurança
 
@@ -290,6 +315,6 @@ Para um entendimento mais profundo das APIs e serviços utilizados, consulte:
 Estes recursos são especialmente úteis quando você precisar:
 - Entender melhor como a integração funciona
 - Resolver problemas específicos
-- Expandir as funcionalidades do programa
+- Expandir as funcionalidades do script
 - Implementar novas integrações
 

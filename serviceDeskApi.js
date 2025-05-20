@@ -28,51 +28,6 @@ async function saveToken(tokenData) {
   }
 }
 
-// Função para ler o token do arquivo
-async function readToken() {
-  try {
-    if (fs.existsSync(zohoAuthConfig.tokenFilePath)) {
-      const tokenData = await fs.promises.readFile(
-        zohoAuthConfig.tokenFilePath,
-        'utf8'
-      );
-      return JSON.parse(tokenData);
-    }
-    return null;
-  } catch (error) {
-    console.error('Erro ao ler o token:', error.message);
-    return null;
-  }
-}
-
-// Função para renovar o token usando refresh_token
-async function refreshToken(refreshToken) {
-  try {
-    const client = getApiClient();
-    const url = `https://accounts.zoho.com/oauth/v2/token?refresh_token=${refreshToken}&client_id=${zohoAuthConfig.clientId}&client_secret=${zohoAuthConfig.clientSecret}&grant_type=refresh_token`;
-    
-    console.log('Renovando token com refresh_token...');
-    
-    const response = await client.post(url);
-    
-    if (response.data && response.data.access_token) {
-      console.log('Token renovado com sucesso!');
-      
-      if (!response.data.refresh_token && refreshToken) {
-        response.data.refresh_token = refreshToken;
-      }
-      
-      await saveToken(response.data);
-      return response.data;
-    } else {
-      throw new Error('Resposta inválida ao renovar token');
-    }
-  } catch (error) {
-    console.error('Erro ao renovar token:', error.message);
-    throw error;
-  }
-}
-
 // Função para autenticar na API do ServiceDesk Plus
 async function authenticate() {
   try {
@@ -104,16 +59,48 @@ async function authenticate() {
   }
 }
 
-// Função para salvar os dados em arquivos JSON
-async function saveDataToFile(data, fileName) {
+// Função para renovar o token usando refresh_token
+async function refreshToken(refreshToken) {
   try {
-    const filePath = path.join(syncConfig.dataPath, fileName);
-    await fs.promises.writeFile(filePath, JSON.stringify(data, null, 2));
-    console.log(`Dados salvos com sucesso em ${filePath}`);
-    return true;
+    const client = getApiClient();
+    const url = `https://accounts.zoho.com/oauth/v2/token?refresh_token=${refreshToken}&client_id=${zohoAuthConfig.clientId}&client_secret=${zohoAuthConfig.clientSecret}&grant_type=refresh_token`;
+    
+    console.log('Renovando token com refresh_token...');
+    
+    const response = await client.post(url);
+    
+    if (response.data && response.data.access_token) {
+      console.log('Token renovado com sucesso!');
+      
+      if (!response.data.refresh_token && refreshToken) {
+        response.data.refresh_token = refreshToken;
+      }
+      
+      await saveToken(response.data);
+      return response.data;
+    } else {
+      throw new Error('Resposta inválida ao renovar token');
+    }
   } catch (error) {
-    console.error(`Erro ao salvar dados em ${fileName}:`, error.message);
+    console.error('Erro ao renovar token:', error.message);
     throw error;
+  }
+}
+
+// Função para ler o token do arquivo
+async function readToken() {
+  try {
+    if (fs.existsSync(zohoAuthConfig.tokenFilePath)) {
+      const tokenData = await fs.promises.readFile(
+        zohoAuthConfig.tokenFilePath,
+        'utf8'
+      );
+      return JSON.parse(tokenData);
+    }
+    return null;
+  } catch (error) {
+    console.error('Erro ao ler o token:', error.message);
+    return null;
   }
 }
 
@@ -145,6 +132,31 @@ async function fetchDataFromAPI(endpoint, dataKey) {
   }
 }
 
+// Função principal para buscar e enviar chamados
+async function fetchTickets() {
+  try {
+    const ticketsData = await fetchDataFromAPI('requests', 'requests');
+    
+    const ticketsFormatados = ticketsData.map(ticket => ({
+      "ticket_id": ticket.id || "",
+      "subject": ticket.subject || "",
+      "status": ticket.status?.name || "",
+      "applicant": ticket.requester?.name  || "",
+      "department": ticket.requester?.department?.name || "",
+      "technician": ticket.technician?.first_name + " " + ticket.technician?.last_name || "",
+      "created_time": ticket.created_time?.display_value || "",
+      "status_in_progress": ticket.status?.in_progress || false
+    }));
+
+    await sendTicketsToAnalytics(ticketsFormatados);
+    
+    return ticketsFormatados;
+  } catch (error) {
+    console.error('Erro ao processar e enviar tickets:', error.message);
+    throw error;
+  }
+}
+
 // Função para enviar dados para o Analytics Plus
 async function sendTicketsToAnalytics(tickets) {
   try {
@@ -169,31 +181,6 @@ async function sendTicketsToAnalytics(tickets) {
     }
   } catch (error) {
     console.error('Erro ao enviar dados para o Analytics Plus:', error.message);
-    throw error;
-  }
-}
-
-// Função principal para buscar e enviar chamados
-async function fetchTickets() {
-  try {
-    const ticketsData = await fetchDataFromAPI('requests', 'requests');
-    
-    const ticketsFormatados = ticketsData.map(ticket => ({
-      "ticket_id": ticket.id || "",
-      "subject": ticket.subject || "",
-      "status": ticket.status?.name || "",
-      "applicant": ticket.requester?.name  || "",
-      "department": ticket.requester?.department?.name || "",
-      "technician": ticket.technician?.first_name + " " + ticket.technician?.last_name || "",
-      "created_time": ticket.created_time?.display_value || "",
-      "status_in_progress": ticket.status?.in_progress || false
-    }));
-
-    await sendTicketsToAnalytics(ticketsFormatados);
-    
-    return ticketsFormatados;
-  } catch (error) {
-    console.error('Erro ao processar e enviar tickets:', error.message);
     throw error;
   }
 }
