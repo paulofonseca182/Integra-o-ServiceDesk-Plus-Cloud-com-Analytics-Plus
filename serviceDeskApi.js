@@ -108,7 +108,7 @@ async function readToken() {
 async function fetchDataFromAPI(endpoint, dataKey) {
   try {
     const tokenData = await authenticate();
-    const url = `https://paulo182.sdpondemand.manageengine.com/app/itdesk/api/v3/${endpoint}`;
+    const url = `${endpoint}`;
     
     const client = axios.create({
       headers: {
@@ -160,8 +160,8 @@ async function fetchTickets() {
 // Função para enviar dados para o Analytics Plus
 async function sendTicketsToAnalytics(tickets) {
   try {
-    const analyticsUrl = 'https://analyticsplus.manageengine.com/stream/107196000000009006/rows';
-    const secret = 'a5c7519b4c321b21367981d92feeb17b598d2c356bdf6291a510f7e8626650';
+    const analyticsUrl = '';
+    const secret = '';
     
     console.log('Enviando dados para o Analytics Plus...');
     
