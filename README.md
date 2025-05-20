@@ -1,221 +1,265 @@
 # Integração ServiceDesk Plus Cloud com Analytics Plus
 
-## Visão Geral
-
-Este projeto desenvolve uma solução para conectar duas ferramentas da ManageEngine: o ServiceDesk Plus Cloud (sistema de gerenciamento de chamados de TI) e o Analytics Plus (plataforma de análise de dados e criação de dashboards). A integração permite extrair informações de chamados, técnicos, departamentos e ativos do ServiceDesk Plus, processá-las e disponibilizá-las no Analytics Plus para a criação de painéis analíticos e relatórios visuais.
-
-Em termos simples, este sistema funciona como uma "ponte" que transporta dados de uma ferramenta para outra, permitindo transformar informações operacionais de suporte técnico em painéis visuais para tomada de decisão.
-
-## Para que serve esta solução?
-
-Imagine que sua empresa utiliza o ServiceDesk Plus para gerenciar os chamados de suporte técnico. Com o tempo, acumula-se uma grande quantidade de dados sobre problemas reportados, tempo de resolução, técnicos responsáveis e muito mais. Porém, analisar esses dados diretamente no ServiceDesk Plus pode ser limitado.
-
-Esta integração permite:
-- Ver tendências de chamados em gráficos interativos
-- Identificar gargalos no atendimento
-- Acompanhar o desempenho dos técnicos
-- Criar painéis personalizados para diferentes públicos (gerentes, técnicos, clientes)
-- Tomar decisões baseadas em dados concretos
-
-## Como funciona (explicação não-técnica)
-
-O sistema funciona em três etapas principais:
-
-1. **Coleta de dados**: O sistema se conecta ao ServiceDesk Plus usando credenciais seguras (como uma chave de acesso especial) e coleta informações sobre chamados, técnicos e outros elementos.
-
-2. **Processamento e armazenamento**: Os dados coletados são organizados, filtrados e salvos temporariamente em arquivos especiais (JSON) que funcionam como "contêineres" de informação.
-
-3. **Envio para o Analytics Plus**: Os dados processados são enviados para o Analytics Plus, onde podem ser utilizados para criar gráficos, tabelas e painéis interativos.
-
-## Passo a Passo da Implementação (Detalhado)
-
-### 1. Preparação do Ambiente
-
-Antes de começar a desenvolver a integração, preparamos o ambiente com todas as ferramentas necessárias:
-
-1. **Instalação do Node.js**: Uma plataforma que permite executar o código JavaScript fora de um navegador.
-
-2. **Criação da estrutura de pastas**: Organizamos o projeto em pastas lógicas para facilitar a manutenção.
-
-3. **Instalação de bibliotecas de apoio**:
-   - **axios**: Uma ferramenta para fazer solicitações à internet (como enviar e receber dados de APIs)
-   - **dotenv**: Para gerenciar informações sensíveis como senhas e chaves
-   - **node-cron**: Para programar tarefas para execução automática em horários específicos
-
-### 2. Configuração das Credenciais de Acesso
-
-Para acessar o ServiceDesk Plus Cloud, precisamos de credenciais especiais. Este processo é semelhante a obter uma "chave especial" para entrar em um sistema protegido:
-
-1. **Criação de conta no ServiceDesk Plus Cloud**: Registramos uma conta para testes.
-
-2. **Obtenção de credenciais OAuth**: O OAuth é um protocolo de segurança que permite que um aplicativo acesse dados em outro sem precisar compartilhar senhas. Precisamos de:
-   - Client ID: Um identificador único da nossa aplicação
-   - Client Secret: Uma senha secreta para nossa aplicação
-   - Código de Autorização: Um código temporário para iniciar o processo de autorização
-
-3. **Configuração no arquivo config.js**: Armazenamos essas credenciais em um arquivo central de configuração.
-
-### 3. Desenvolvimento do Sistema de Autenticação
-
-A autenticação é como um porteiro que controla quem pode entrar no sistema. Implementamos um sistema robusto que:
-
-1. **Autenticação inicial**: Usando o código de autorização, obtemos um par de tokens:
-   - Access Token: Permite acesso temporário aos dados (geralmente válido por 1 hora)
-   - Refresh Token: Permite obter novos access tokens sem precisar reiniciar todo o processo
-
-2. **Renovação automática de tokens**: Quando o access token expira, o sistema usa automaticamente o refresh token para obter um novo, sem interrupção.
-
-3. **Armazenamento seguro**: Os tokens são armazenados em arquivos locais para uso contínuo.
-
-Este sistema de autenticação é crucial porque garante acesso contínuo e seguro aos dados, sem exigir intervenção manual a cada hora.
-
-### 4. Extração de Dados do ServiceDesk Plus
-
-Com a autenticação funcionando, implementamos a coleta de dados:
-
-1. **Identificação dos endpoints**: "Endpoints" são como portas específicas para diferentes tipos de dados. Identificamos os seguintes:
-   - `/requests`: Para acessar dados de chamados
-   - `/technicians`: Para informações sobre técnicos
-   - `/departments`: Para estrutura organizacional
-   - `/assets`: Para inventário de equipamentos e software
-
-2. **Criação de funções específicas**: Desenvolvemos funções dedicadas para cada tipo de dado, permitindo coleta independente.
-
-3. **Tratamento de permissões**: Um desafio encontrado foi a limitação de acesso a alguns endpoints. Nossa solução:
-   - Verificar quais endpoints estão acessíveis
-   - Capturar e tratar erros de permissão (código 401)
-   - Criar arquivos vazios para endpoints inacessíveis, permitindo que o sistema continue funcionando
-
-4. **Salvamento dos dados**: Todos os dados coletados são salvos em arquivos JSON na pasta `data/`:
-   - `tickets.json`: Contém todos os chamados
-   - `technicians.json`: Lista de técnicos (quando acessível)
-   - `departments.json`: Estrutura de departamentos (quando acessível)
-   - `assets.json`: Inventário de ativos (quando acessível)
-
-### 5. Scripts de Teste
-
-Para garantir que cada parte do sistema funcione corretamente, criamos diversos scripts de teste:
-
-1. **testeAuth.js**: Verifica se a autenticação inicial funciona corretamente
-2. **testeRefreshToken.js**: Testa o processo de renovação de tokens
-3. **testeTickets.js**: Verifica a coleta de dados de chamados
-4. **testeTechnicians.js**: Testa o acesso a dados de técnicos
-5. **testeDepartments.js**: Verifica o acesso a departamentos
-6. **testeAssets.js**: Testa a coleta de dados de ativos
-
-Estes scripts são ferramentas importantes para identificar e corrigir problemas específicos sem precisar executar todo o sistema.
-
-### 6. Descoberta de Limitações e Soluções
-
-Durante a implementação, descobrimos uma limitação importante: o acesso via API está restrito apenas a chamados (tickets), sem permissão para acessar outros tipos de dados como técnicos e departamentos.
-
-Para contornar esta limitação, implementamos as seguintes soluções:
-
-1. **Tratamento elegante de erros**: O sistema detecta quando um endpoint não está acessível e cria arquivos vazios para manter a consistência.
-
-2. **Escopo expandido para tickets**: Utilizamos o escopo `SDPOnDemand.requests.ALL` que oferece acesso completo aos dados de chamados.
-
-3. **Extração de informações adicionais dos tickets**: Muitas informações sobre técnicos e departamentos estão contidas nos próprios chamados, permitindo criar conjuntos de dados secundários.
-
-### 7. Preparação para Integração com Analytics Plus
-
-Com os dados do ServiceDesk Plus coletados com sucesso, preparamos a integração com o Analytics Plus:
-
-1. **Estruturação dos arquivos**:
-   - `analyticsApi.js`: Contém funções para interagir com a API do Analytics Plus
-   - `pushToAnalytics.js`: Script para enviar os dados coletados
-
-2. **Definição do esquema de dados**: Mapeamos como os dados do ServiceDesk Plus serão estruturados no Analytics Plus.
-
-3. **Planejamento dos dashboards**: Definimos três painéis principais para criação:
-   - Dashboard de Volume de Chamados
-   - Dashboard de Performance de Atendimento
-   - Dashboard de Análise de Tendências
-
-## Desafios Enfrentados e Soluções
-
-### 1. Limitação de Escopos de API
-
-**Desafio**: Descobrimos que o acesso à API do ServiceDesk Plus Cloud é limitado apenas a chamados, sem acesso a técnicos, departamentos e ativos.
-
-**Solução**: 
-- Foco nos dados de chamados que são acessíveis
-- Extração de informações sobre técnicos e departamentos a partir dos próprios chamados
-- Sistema projetado para continuar funcionando mesmo com acesso parcial
-
-### 2. Limites de Requisições (Rate Limiting)
-
-**Desafio**: O Zoho/ServiceDesk Plus limita o número de requisições que podem ser feitas em um curto período de tempo.
-
-**Solução**:
-- Implementação de mecanismos para detectar limites de taxa (mensagens "too many requests")
-- Planejamento para adicionar espera automática entre requisições
-- Estratégia de backoff exponencial (aumentar progressivamente o tempo de espera entre tentativas)
-
-### 3. Renovação de Tokens
-
-**Desafio**: Os tokens de acesso expiram após uma hora, exigindo renovação constante.
-
-**Solução**:
-- Sistema automatizado de refresh token
-- Armazenamento do refresh token para uso contínuo
-- Renovação transparente de access tokens sem interrupção do serviço
-
-## Como Executar o Sistema
-
-Para pessoas não técnicas, o sistema pode ser executado seguindo estes passos simples:
-
-1. **Configuração inicial** (uma única vez):
-   - Verifique se o Node.js está instalado no computador
-   - Abra um terminal ou prompt de comando
-   - Navegue até a pasta do projeto
-   - Execute `npm install` para instalar as dependências
-
-2. **Coleta de dados do ServiceDesk Plus**:
-   - Execute `node fetchServiceDeskData.js`
-   - O sistema irá se autenticar e coletar os dados disponíveis
-   - Os arquivos resultantes serão salvos na pasta `data/`
-
-3. **Envio para o Analytics Plus** (quando implementado):
-   - Execute `node pushToAnalytics.js`
-   - Os dados serão enviados para o Analytics Plus para visualização
-
-4. **Execução automática** (quando configurado):
-   - Execute `node index.js`
-   - O sistema irá coletar e enviar dados automaticamente nos horários programados
-
-## Próximas Etapas
-
-O projeto está em desenvolvimento contínuo, com as seguintes etapas planejadas:
-
-1. **Implementação completa da integração com Analytics Plus**:
-   - Autenticação com o Analytics Plus
-   - Criação de fontes de dados
-   - Envio automatizado de informações
-
-2. **Criação de dashboards**:
-   - Dashboard de Volume de Chamados
-   - Dashboard de Performance de Atendimento
-   - Dashboard de Análise de Tendências
-
-3. **Automatização do processo completo**:
-   - Agendamento de sincronização periódica
-   - Notificações de sucesso/falha
-   - Monitoramento do processo
-
-4. **Documentação abrangente**:
-   - Manual do usuário
-   - Guia de troubleshooting
-   - Exemplos de uso
-
-## Conclusão
-
-Esta integração entre ServiceDesk Plus Cloud e Analytics Plus demonstra como dados operacionais de suporte técnico podem ser transformados em informações estratégicas através de painéis analíticos. Apesar dos desafios enfrentados com limitações de API, o sistema foi projetado para ser robusto e flexível, adaptando-se às restrições encontradas.
-
-O projeto oferece uma base sólida para análise de dados de chamados de TI, permitindo que gestores tomem decisões baseadas em dados concretos sobre a operação de suporte técnico.
-
-## Recursos Adicionais
-
-- [Documentação da API do ServiceDesk Plus Cloud](https://www.manageengine.com/products/service-desk/sdpod-v3-api/)
-- [Documentação do Analytics Plus](https://www.manageengine.com/analytics-plus/help/api/)
-- [Guia do OAuth do Zoho](https://www.zoho.com/accounts/protocol/oauth/)
+Este programa faz a conexão entre o ServiceDesk Plus Cloud e o Analytics Plus, copiando automaticamente as informações dos chamados (tickets) de um sistema para o outro.
+
+## 🤔 Para que serve?
+
+Imagine que você precisa ver relatórios dos seus chamados do ServiceDesk Plus no Analytics Plus. Este programa faz exatamente isso:
+1. Busca todos os chamados do ServiceDesk Plus
+2. Organiza as informações importantes de cada chamado:
+   - Número do chamado
+   - Assunto
+   - Status (Aberto, Em andamento, Resolvido, etc.)
+   - Nome do solicitante
+   - Departamento do solicitante
+   - Nome do técnico responsável
+   - Data de criação
+   - Se está em andamento ou não
+3. Envia essas informações para o Analytics Plus
+4. Repete esse processo automaticamente a cada 3 minutos (se você quiser)
+
+## 📋 O que você precisa ter instalado?
+
+1. Node.js
+   - É um programa que permite rodar nosso script
+   - Para verificar se já está instalado:
+     1. Abra o "Prompt de Comando" (CMD) ou "PowerShell"
+     2. Digite: `node --version`
+     3. Se aparecer algo como "v14.0.0" (ou número maior), já está instalado
+     4. Se der erro, baixe e instale do site: https://nodejs.org/
+     5. Escolha a versão "LTS" (mais estável)
+
+2. NPM (vem junto com o Node.js)
+   - Para verificar se está instalado:
+     1. No mesmo prompt de comando
+     2. Digite: `npm --version`
+     3. Se aparecer um número de versão, está tudo certo
+
+## 💻 Como instalar?
+
+1. Baixe este projeto para seu computador
+2. Abra o prompt de comando (CMD ou PowerShell)
+3. Navegue até a pasta onde você baixou o projeto
+   - Use o comando `cd` para navegar
+   - Exemplo: `cd C:\Projetos\Integracao-ServiceDesk-Analytics`
+4. Digite o comando:
+   ```
+   npm install
+   ```
+   - Este comando vai instalar tudo que o programa precisa
+   - Aguarde até finalizar
+
+## ⚙️ Configuração
+
+O programa precisa saber como acessar seus sistemas. As configurações ficam no arquivo `config.js`:
+
+1. Configurações do ServiceDesk Plus:
+   - `clientId`: Seu ID de cliente
+   - `clientSecret`: Sua chave secreta
+   - `code`: Código de autorização
+   - `redirectUri`: URL de redirecionamento
+
+2. Configurações do Analytics Plus:
+   - Já estão configuradas no código
+   - Não precisa alterar
+
+Se precisar alterar alguma dessas informações, peça ajuda ao seu time de TI.
+
+## 🚀 Como usar?
+
+Você tem duas opções para rodar o programa:
+
+1. **Execução única** (roda uma vez e para):
+   ```
+   node integration.js
+   ```
+   Use quando quiser atualizar os dados apenas uma vez
+
+2. **Execução automática** (atualiza a cada 3 minutos):
+   ```
+   node integration.js --periodic
+   ```
+   Use quando quiser manter os dados sempre atualizados
+
+## 🔍 Como saber se está funcionando?
+
+1. No prompt de comando, você verá mensagens como:
+   - "Iniciando integração..."
+   - "Encontrados X chamados"
+   - "Dados enviados com sucesso!"
+
+2. No Analytics Plus:
+   - Os dados dos chamados aparecerão atualizados
+   - Você poderá criar relatórios e dashboards
+
+## ❌ Se algo der errado
+
+Se aparecer algum erro:
+
+1. Verifique se:
+   - Seu computador está conectado à internet
+   - As configurações no `config.js` estão corretas
+   - O ServiceDesk Plus está funcionando
+   - O Analytics Plus está funcionando
+
+2. Mensagens comuns de erro:
+   - "Erro de autenticação": Verifique as configurações de acesso
+   - "Erro ao buscar dados": Problema de conexão com ServiceDesk Plus
+   - "Erro ao enviar dados": Problema de conexão com Analytics Plus
+
+## 📞 Precisa de ajuda?
+
+Se encontrar algum problema:
+1. Verifique a documentação do ServiceDesk Plus
+2. Verifique a documentação do Analytics Plus
+3. Entre em contato com o suporte técnico
+
+## 🔒 Segurança
+
+- O programa salva um arquivo `auth_token.json` com informações de login
+- Este arquivo é necessário e seguro
+- Não compartilhe este arquivo com ninguém
+- Não apague este arquivo (o programa cria um novo se necessário)
+
+## 🔧 Detalhamento Técnico do Projeto
+
+### 📁 Arquivos do Projeto
+
+O projeto possui 4 arquivos principais:
+
+1. `integration.js`: Arquivo principal que você executa
+2. `serviceDeskApi.js`: Contém todas as funções de integração
+3. `config.js`: Guarda todas as configurações
+4. `cleanupFiles.js`: Ajuda a manter os arquivos organizados
+
+### ⚙️ Como Funciona (Passo a Passo)
+
+#### 1. Arquivo `integration.js`
+Este é o arquivo que você executa. Ele tem duas funções principais:
+- `runIntegration()`: Executa a integração uma única vez
+- `runPeriodicIntegration()`: Executa a integração a cada 3 minutos
+
+#### 2. Arquivo `serviceDeskApi.js`
+Este é o coração do projeto. Vamos entender cada função:
+
+##### Funções de Autenticação:
+1. `getApiClient()`
+   - Cria um cliente HTTP com as configurações básicas
+   - Define os tipos de conteúdo aceitos
+
+2. `authenticate()`
+   - Verifica se já existe um token salvo
+   - Se existir e estiver válido, usa ele
+   - Se não existir ou estiver expirado, pede um novo
+   - Salva o token para uso futuro
+
+3. `refreshToken()`
+   - Renova um token que está para expirar
+   - Evita ter que fazer login toda hora
+   - Salva o novo token
+
+4. `saveToken()`
+   - Salva o token no arquivo `auth_token.json`
+   - Guarda informações como:
+     * Token de acesso
+     * Quando ele expira
+     * Token de renovação
+
+5. `readToken()`
+   - Lê o token salvo no arquivo
+   - Verifica se ele existe
+   - Retorna as informações do token
+
+##### Funções de Busca e Envio de Dados:
+1. `fetchDataFromAPI()`
+   - Conecta no ServiceDesk Plus
+   - Usa o token de autenticação
+   - Busca os dados solicitados
+   - Retorna os dados encontrados
+
+2. `fetchTickets()`
+   - Busca todos os chamados
+   - Formata cada chamado coletando:
+     * ID do chamado
+     * Assunto
+     * Status
+     * Nome do solicitante
+     * Departamento
+     * Nome do técnico
+     * Data de criação
+     * Se está em andamento
+   - Envia para o Analytics Plus
+
+3. `sendTicketsToAnalytics()`
+   - Recebe os chamados formatados
+   - Conecta no Analytics Plus
+   - Envia os dados usando a URL e chave secreta
+   - Confirma se o envio deu certo
+
+#### 3. Arquivo `config.js`
+Guarda todas as configurações importantes:
+
+1. Configurações do Zoho Auth:
+   - URLs de autenticação
+   - IDs e chaves do cliente
+   - Onde salvar o token
+
+2. Configurações do ServiceDesk:
+   - URL base do sistema
+   - Endpoints da API
+
+3. Configurações do Analytics Plus:
+   - URL para envio dos dados
+   - Chave secreta
+
+#### 4. Arquivo `cleanupFiles.js`
+Mantém o projeto organizado:
+- Remove arquivos temporários
+- Mantém apenas os arquivos necessários
+- Garante que o diretório de dados existe
+
+### 🔄 Fluxo de Execução
+
+Quando você executa o programa, acontece o seguinte:
+
+1. O `integration.js` inicia
+2. Chama a função `fetchTickets()`
+3. Esta função:
+   - Faz a autenticação
+   - Busca os chamados
+   - Formata os dados
+   - Envia para o Analytics Plus
+4. Se estiver no modo periódico:
+   - Espera 3 minutos
+   - Repete todo o processo
+
+### 🔐 Segurança
+
+O projeto usa várias camadas de segurança:
+1. Tokens de autenticação seguros
+2. Renovação automática de tokens
+3. HTTPS para todas as conexões
+4. Chaves secretas para o Analytics Plus
+5. Armazenamento seguro de credenciais
+
+### 📊 Dados Processados
+
+Cada chamado é transformado neste formato:
+```json
+{
+  "ticket_id": "123456",
+  "subject": "Problema com impressora",
+  "status": "Em andamento",
+  "applicant": "João Silva",
+  "department": "TI",
+  "technician": "Maria Técnica",
+  "created_time": "2024-01-20 14:30",
+  "status_in_progress": true
+}
+```
+
+Este formato foi escolhido para:
+- Facilitar a criação de relatórios
+- Permitir filtros eficientes
+- Manter a rastreabilidade dos chamados
+- Facilitar análises no Analytics Plus 

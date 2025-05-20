@@ -20,9 +20,6 @@ const serviceDeskConfig = {
   apiKey: process.env.SERVICEDESK_API_KEY,
   endpoints: {
     tickets: '/api/v3/requests',
-    technicians: '/api/v3/technicians',
-    departments: '/api/v3/departments',
-    assets: '/api/v3/assets'
   }
 };
 

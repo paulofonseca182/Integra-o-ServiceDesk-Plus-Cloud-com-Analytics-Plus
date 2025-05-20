@@ -20,7 +20,6 @@ async function cleanupUnnecessaryFiles() {
     
     // Arquivos necessários para manter
     const necessaryFiles = [
-      'tickets.json',      // Dados dos chamados formatados
       'auth_token.json',   // Token de autenticação
       'sync_summary.json'  // Resumo da sincronização
     ];
