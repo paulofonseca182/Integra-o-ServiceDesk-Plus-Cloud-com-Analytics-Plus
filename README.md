@@ -60,10 +60,9 @@ O programa precisa saber como acessar seus sistemas. As configurações ficam no
    - `redirectUri`: URL de redirecionamento
 
 2. Configurações do Analytics Plus:
-   - Já estão configuradas no código
-   - Não precisa alterar
+   - analyticsUrl: Url workspace e tabela (fornecida ao criar tabela)
+   - secret: codigo fornecido junto da url
 
-Se precisar alterar alguma dessas informações, peça ajuda ao seu time de TI.
 
 ## 🚀 Como usar?
 
@@ -111,8 +110,10 @@ Se aparecer algum erro:
 
 Se encontrar algum problema:
 1. Verifique a documentação do ServiceDesk Plus
+   - [Documentação Oficial da API](https://www.manageengine.com/products/service-desk/sdp-v3-api/)
 2. Verifique a documentação do Analytics Plus
-3. Entre em contato com o suporte técnico
+   - [Documentação do Analytics Plus](https://www.manageengine.com/analytics-plus/help/)
+
 
 ## 🔒 Segurança
 
