@@ -2,6 +2,18 @@
 
 Este script faz a conexão entre o ServiceDesk Plus Cloud e o Analytics Plus, copiando automaticamente as informações dos chamados (tickets) de um sistema para o outro.
 
+## 📑 Índice
+- [Para que serve?](#-para-que-serve)
+- [O que você precisa ter instalado?](#-o-que-você-precisa-ter-instalado)
+- [Como instalar?](#-como-instalar)
+- [Configuração](#️-configuração)
+- [Como usar?](#-como-usar)
+- [Como saber se está funcionando?](#-como-saber-se-está-funcionando)
+- [Se algo der errado](#-se-algo-der-errado)
+- [Segurança](#-segurança)
+- [Detalhamento Técnico do Projeto](#-detalhamento-técnico-do-projeto)
+- [Recursos Adicionais](#-recursos-adicionais)
+
 ## 🤔 Para que serve?
 
 Precisa ver relatórios dos seus chamados do ServiceDesk Plus no Analytics Plus? Este script faz exatamente isso:
