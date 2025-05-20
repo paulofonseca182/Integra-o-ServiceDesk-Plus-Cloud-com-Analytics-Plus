@@ -258,8 +258,37 @@ Cada chamado é transformado neste formato:
 }
 ```
 
-Este formato foi escolhido para:
-- Facilitar a criação de relatórios
-- Permitir filtros eficientes
-- Manter a rastreabilidade dos chamados
-- Facilitar análises no Analytics Plus 
+## 📚 Recursos Adicionais
+
+Para um entendimento mais profundo das APIs e serviços utilizados, consulte:
+
+1. **ServiceDesk Plus Cloud**
+   - [Documentação Oficial da API](https://www.manageengine.com/products/service-desk/sdp-v3-api/)
+   - Inclui detalhes sobre:
+     * Endpoints disponíveis
+     * Formatos de requisição
+     * Códigos de resposta
+     * Exemplos de uso
+
+2. **Analytics Plus**
+   - [Documentação do Analytics Plus](https://www.manageengine.com/analytics-plus/help/)
+   - Informações sobre:
+     * Importação de dados
+     * Criação de relatórios
+     * Dashboards personalizados
+     * Integrações disponíveis
+
+3. **Zoho OAuth**
+   - [Guia do OAuth do Zoho](https://www.zoho.com/accounts/protocol/oauth/)
+   - Explica:
+     * Processo de autenticação
+     * Geração de tokens
+     * Renovação de tokens
+     * Boas práticas de segurança
+
+Estes recursos são especialmente úteis quando você precisar:
+- Entender melhor como a integração funciona
+- Resolver problemas específicos
+- Expandir as funcionalidades do programa
+- Implementar novas integrações
+
