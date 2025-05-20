@@ -160,8 +160,8 @@ async function fetchTickets() {
 // Função para enviar dados para o Analytics Plus
 async function sendTicketsToAnalytics(tickets) {
   try {
-    const analyticsUrl = 'https://analyticsplus.manageengine.com/stream/107196000000007268/rows';
-    const secret = '68116f2bca6e72f1e5a97dcca533ca6dd9e06fe24861c31493d9eac8b';
+    const analyticsUrl = 'https://analyticsplus.manageengine.com/stream/107196000000009006/rows';
+    const secret = 'a5c7519b4c321b21367981d92feeb17b598d2c356bdf6291a510f7e8626650';
     
     console.log('Enviando dados para o Analytics Plus...');
     
